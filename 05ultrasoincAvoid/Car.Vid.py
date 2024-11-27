@@ -1,4 +1,4 @@
-
+import cv2   
 import RPi.GPIO as GPIO
 import time
 
@@ -17,9 +17,16 @@ GPIO.setup(Tracking_Right1,GPIO.IN)
 GPIO.setup(Tracking_Right2,GPIO.IN)
 
 print ('start')
-
-try:
-    while True:
+def main():
+    camera = cv2.VideoCapture(-1) 
+    camera.set(3,640)  
+    camera.set(4,480)  
+    
+    while( camera.isOpened() ):  
+        _, image = camera.read()  
+        image = cv2.flip(image,-1) 
+        cv2.imshow( 'camera test' , image) 
+                
         Tracking_Left1Value = GPIO.input(Tracking_Left1);
         Tracking_Left2Value = GPIO.input(Tracking_Left2);
         Tracking_Right1Value = GPIO.input(Tracking_Right1);
@@ -30,7 +37,18 @@ try:
         print ('Car Right: ', Tracking_Right2Value)
         print ('---')
         time.sleep(1)
+        
+        if cv2.waitKey(1) == ord('q'): 
+            break
+        
+    cv2.destroyAllWindows() 
+
+try:
+    main()    
 except KeyboardInterrupt:
     pass
 print("Ending")
 GPIO.cleanup()
+
+if __name__ == '__main__':
+    main()

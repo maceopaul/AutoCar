@@ -1,39 +1,12 @@
-# %%
-"""
-/**
-* @par Copyright (C): 2010-2020, Shenzhen Yahboom Tech
-* @file:         超声波避障.ipynb
-* @author:       xiaozhen
-* @version：     V1.0
-* @date:         2020.10.12
-* @brief:        超声波避障
-* @details:
-* @par History:  见如下说明
-*/
-"""
 
-# %%
-"""
-### 导入我们需要用到的库文件
-"""
 
-# %%
-#-*- coding:UTF-8 -*-
 import RPi.GPIO as GPIO
 import time
 import YB_Pcb_Car    #导入Yahboom专门库文件
 
 car = YB_Pcb_Car.YB_Pcb_Car()
 
-# %%
-"""
-### 定义本次课程需要用到的引脚。
 
-### 设置GPIO的编码方式，以及初始化设置。
-"""
-
-# %%
-#设置GPIO口为BIARD编码方式
 GPIO.setmode(GPIO.BOARD)
 
 #忽略警告信息
@@ -43,7 +16,6 @@ GPIO.setwarnings(False)
 EchoPin = 18
 TrigPin = 16
 
-#设置超声波模块引脚的模式
 GPIO.setup(EchoPin,GPIO.IN)
 GPIO.setup(TrigPin,GPIO.OUT)
 
@@ -92,24 +64,22 @@ def Distance_test():
             #time.sleep(0.01)
     #print ('ultrasonic')
     distance = (ultrasonic[1] + ultrasonic[2] + ultrasonic[3])/3
-    #print("distance is %f"%(distance) ) 
+    print("distance is %f"%(distance) ) 
     return distance
 
-# %%
-"""
-### 以下Avoid函数用于完成小车超声波避障功能
-"""
+
 
 # %%
 def avoid():
     distance = Distance_test()
     if distance < 15 :
         car.Car_Stop() 
-        time.sleep(0.1)
-        car.Car_Spin_Right(100,100) 
+        time.sleep(1)
+        #car.Car_Spin_Right(100,100)
+        car.Car_Back(50, 50)
         time.sleep(0.5)
     else:
-        car.Car_Run(100,100) 
+        car.Car_Run(50,50) 
 
 # %%
 try:
@@ -122,10 +92,3 @@ del car
 print("Ending")
 GPIO.cleanup()
 
-# %%
-"""
-### 当你需要结束整个程序时，请点击上方菜单栏中的方块型按钮(Interrupt the kernel）.
-### 然后你可以看到Ending提示，表示已经成功地结束了这个程序
-"""
-
-# %%
